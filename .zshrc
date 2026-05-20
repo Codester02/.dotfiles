@@ -102,3 +102,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+#
+alias neofetch="pokeget lycanroc --form midnight -s --hide-name | fastfetch --logo-padding-top 10 --logo-padding-right 7 --logo-padding-left 6 --file-raw -"
+
+neofetch

@@ -21,7 +21,8 @@
             "firefox",
             "discord",
             "nvim",
-            "kitty"
+            "kitty",
+            "org.kde.dolphin"
         ],
         "position": "center",
         "screenshotAnnotationTool": "",
