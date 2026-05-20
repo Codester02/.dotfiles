@@ -6,7 +6,7 @@ DOTFILES_DIR="$HOME/.dotfiles"
 
 echo "Installing dotfiles..."
 
-sudo pacman -S --needed neovim kitty git firefox base-devel discord telegram-desktop steam
+sudo pacman -S --needed neovim kitty git firefox base-devel discord telegram-desktop steam spotify-player python-pipx
 
 #setup Aur
 cd ~
@@ -18,6 +18,13 @@ cd ~/"$DOTFILES_DIR"
 yay -S noctalia-shell
 # Create config dirs
 mkdir -p ~/.config
+
+#oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+#pywalfox
+pipx install pywalfox
+pywalfox install
 
 # Symlink configs
 ln -sf "$DOTFILES_DIR/nvim" ~/.config/nvim
