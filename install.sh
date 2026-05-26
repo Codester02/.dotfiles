@@ -1,49 +1,138 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 DOTFILES_DIR="$HOME/.dotfiles"
 
 echo "Installing dotfiles..."
-echo "Installing pacman apps"
-sudo pacman -S --needed dolphin hyprland neovim kitty git firefox base-devel discord telegram-desktop steam spotify-player python-pipx fastfetch ttf-jetbrains-mono-nerd noto-fonts-emoji ly
 
-#setup Aur
-echo "AUR setup"
-cd ~
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-cd ~/"$DOTFILES_DIR"
+# --------------------------------------------------
+# Pacman packages
+# --------------------------------------------------
 
-echo "installing AUR apps"
-yay -S --needed noctalia-shell pokeget cliphist
-# Create config dirs
+echo "Installing pacman packages..."
+
+sudo pacman -S --needed \
+  dolphin \
+  hyprland \
+  neovim \
+  kitty \
+  git \
+  curl \
+  zsh \
+  firefox \
+  base-devel \
+  discord \
+  telegram-desktop \
+  steam \
+  spotify-player \
+  python-pipx \
+  fastfetch \
+  ttf-jetbrains-mono-nerd \
+  noto-fonts-emoji \
+  ly \
+  thunderbird
+
+# --------------------------------------------------
+# yay setup
+# --------------------------------------------------
+
+echo "Setting up yay..."
+
+if [[ ! -d "$HOME/yay" ]]; then
+  git clone https://aur.archlinux.org/yay.git "$HOME/yay"
+fi
+
+cd "$HOME/yay"
+makepkg -si --noconfirm
+
+# --------------------------------------------------
+# AUR packages
+# --------------------------------------------------
+
+echo "Installing AUR packages..."
+
+yay -S --needed \
+  noctalia-shell \
+  pokeget \
+  cliphist
+
+# --------------------------------------------------
+# Directories
+# --------------------------------------------------
+
 mkdir -p ~/.config
+mkdir -p ~/Pictures
 
-echo "installing ohmyzsh"
-#oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+cd "$DOTFILES_DIR"
 
-#pywalfox
-echo "Installing pywalfox"
-pipx install pywalfox
-pywalfox install
+# --------------------------------------------------
+# Oh My Zsh
+# --------------------------------------------------
 
-#ly config
-echo "ly config"
-sudo rm /etc/ly/*
-sudo rm /etc/ly/*/*
-sudo rmdir /etc/ly/*
-sudo rmdir /etc/ly
+echo "Installing oh-my-zsh..."
 
-# Symlink configs
-echo "configuring symlinks"
-ln -sf "$DOTFILES_DIR/nvim" ~/.config/nvim
-ln -sf "$DOTFILES_DIR/.zshrc" ~/.zshrc
-ln -sf "$DOTFILES_DIR/hypr" ~/.config/hypr
-ln -sf "$DOTFILES_DIR/kitty" ~/.config/kitty
-ln -sf "$DOTFILES_DIR/noctalia" ~/.config/noctalia
-ln -sf "$DOTFILES_DIR/Wallpapers" ~/Pictures/Wallpapers
-sudo ln -sf "$DOTFILES_DIR/ly" /etc/
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+  RUNZSH=no CHSH=no sh -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+# --------------------------------------------------
+# Pywalfox
+# --------------------------------------------------
+
+echo "Installing pywalfox..."
+
+pipx ensurepath
+
+if ! command -v pywalfox >/dev/null 2>&1; then
+  pipx install pywalfox
+fi
+
+pywalfox install || true
+
+# --------------------------------------------------
+# Symlink helpers
+# --------------------------------------------------
+
+link_dir() {
+  rm -rf "$2"
+  ln -s "$1" "$2"
+}
+
+link_file() {
+  rm -f "$2"
+  ln -s "$1" "$2"
+}
+
+# --------------------------------------------------
+# Symlinks
+# --------------------------------------------------
+
+echo "Configuring symlinks..."
+
+link_dir "$DOTFILES_DIR/nvim" ~/.config/nvim
+link_dir "$DOTFILES_DIR/hypr" ~/.config/hypr
+link_dir "$DOTFILES_DIR/kitty" ~/.config/kitty
+link_dir "$DOTFILES_DIR/noctalia" ~/.config/noctalia
+
+link_dir "$DOTFILES_DIR/Wallpapers" ~/Pictures/Wallpapers
+
+link_file "$DOTFILES_DIR/.zshrc" ~/.zshrc
+
+sudo rm -rf /etc/ly
+sudo ln -s "$DOTFILES_DIR/ly" /etc/ly
+
+# --------------------------------------------------
+# Services
+# --------------------------------------------------
+
+echo "Enabling services..."
+
+sudo systemctl enable ly.service
+
+# --------------------------------------------------
+# Done
+# --------------------------------------------------
+
 echo "Done."

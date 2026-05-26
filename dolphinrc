@@ -1,4 +1,5 @@
 [General]
+ShowStatusBar=FullWidth
 Version=202
 ViewPropsTimestamp=2026,3,7,21,32,59.757
 
@@ -11,6 +12,9 @@ Places Icons Static Size=22
 
 [MainWindow]
 MenuBar=Disabled
+
+[PreviewSettings]
+Plugins=appimagethumbnail,audiothumbnail,glycin-heif,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,imagethumbnail,glycin-image-rs,jpegthumbnail,glycin-jxl,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,glycin-svg,svgthumbnail
 
 [UiSettings]
 ColorScheme=noctalia
