@@ -55,7 +55,8 @@ echo "Installing AUR packages..."
 yay -S --needed \
   noctalia-shell \
   pokeget \
-  cliphist
+  cliphist \ 
+  python-pywalfox
 
 # --------------------------------------------------
 # Directories
@@ -85,11 +86,7 @@ echo "Installing pywalfox..."
 
 pipx ensurepath
 
-if ! command -v pywalfox >/dev/null 2>&1; then
-  pipx install pywalfox
-fi
-
-pywalfox install || true
+python pywalfox install || true
 
 # --------------------------------------------------
 # Symlink helpers
