@@ -106,3 +106,6 @@ source $ZSH/oh-my-zsh.sh
 alias neofetch="pokeget lycanroc --form midnight -s --hide-name | fastfetch --logo-padding-top 10 --logo-padding-right 7 --logo-padding-left 6 --file-raw -"
 
 neofetch
+
+# Created by `pipx` on 2026-05-27 18:05:26
+export PATH="$PATH:/home/connor/.local/bin"

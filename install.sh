@@ -11,7 +11,7 @@ echo "Installing dotfiles..."
 # --------------------------------------------------
 
 echo "Installing pacman packages..."
-
+echo "Remember to enable multilib in /etc/pacman.conf"
 sudo pacman -S --needed \
   dolphin \
   hyprland \
@@ -55,7 +55,7 @@ echo "Installing AUR packages..."
 yay -S --needed \
   noctalia-shell \
   pokeget \
-  cliphist \ 
+  cliphist \
   python-pywalfox
 
 # --------------------------------------------------
@@ -64,6 +64,7 @@ yay -S --needed \
 
 mkdir -p ~/.config
 mkdir -p ~/Pictures
+mkdir -p ~/Pictures/Screenshots
 
 cd "$DOTFILES_DIR"
 
@@ -77,16 +78,6 @@ if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   RUNZSH=no CHSH=no sh -c \
     "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
-
-# --------------------------------------------------
-# Pywalfox
-# --------------------------------------------------
-
-echo "Installing pywalfox..."
-
-pipx ensurepath
-
-python pywalfox install || true
 
 # --------------------------------------------------
 # Symlink helpers
@@ -112,24 +103,12 @@ link_dir "$DOTFILES_DIR/nvim" ~/.config/nvim
 link_dir "$DOTFILES_DIR/hypr" ~/.config/hypr
 link_dir "$DOTFILES_DIR/kitty" ~/.config/kitty
 link_dir "$DOTFILES_DIR/noctalia" ~/.config/noctalia
-
+link_dir "$DOTFILES_DIR/fastfetch" ~/.config/fastfetch
 link_dir "$DOTFILES_DIR/Wallpapers" ~/Pictures/Wallpapers
 
 link_file "$DOTFILES_DIR/.zshrc" ~/.zshrc
 
 sudo rm -rf /etc/ly
 sudo ln -s "$DOTFILES_DIR/ly" /etc/ly
-
-# --------------------------------------------------
-# Services
-# --------------------------------------------------
-
-echo "Enabling services..."
-
-sudo systemctl enable ly.service
-
-# --------------------------------------------------
-# Done
-# --------------------------------------------------
 
 echo "Done."
