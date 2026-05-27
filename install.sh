@@ -105,6 +105,7 @@ link_dir "$DOTFILES_DIR/kitty" ~/.config/kitty
 link_dir "$DOTFILES_DIR/noctalia" ~/.config/noctalia
 link_dir "$DOTFILES_DIR/fastfetch" ~/.config/fastfetch
 link_dir "$DOTFILES_DIR/Wallpapers" ~/Pictures/Wallpapers
+link_dir "$DOTFILES_DIR/spotify-player" ~/.config/spotify-player
 
 link_file "$DOTFILES_DIR/.zshrc" ~/.zshrc
 
