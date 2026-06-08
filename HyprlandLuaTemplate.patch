@@ -1,0 +1,75 @@
+diff --git a/Scripts/bash/template-apply.sh b/Scripts/bash/template-apply.sh
+index b7fc92dfc..ee92a22b9 100755
+--- a/Scripts/bash/template-apply.sh
++++ b/Scripts/bash/template-apply.sh
+@@ -334,20 +334,37 @@ niri)
+ hyprland)
+     echo "🎨 Applying 'noctalia' theme to Hyprland..."
+     CONFIG_DIR="$HOME/.config/hypr"
+-    CONFIG_FILE="$CONFIG_DIR/hyprland.conf"
+-    THEME_FILE="$CONFIG_DIR/noctalia/noctalia-colors.conf"
+-
+-    INCLUDE_LINE="source = $THEME_FILE"
+-
+-    # Check if the config file exists.
+-    if [ ! -f "$CONFIG_FILE" ]; then
++    LEGACY_CONFIG_FILE="$CONFIG_DIR/hyprland.conf"
++    LUA_CONFIG_FILE="$CONFIG_DIR/hyprland.lua"
++    LEGACY_THEME_FILE="$CONFIG_DIR/noctalia/noctalia-colors.conf"
++    LUA_THEME_FILE="$CONFIG_DIR/noctalia/noctalia-colors.lua"
++
++    LEGACY_INCLUDE_LINE="source = $LEGACY_THEME_FILE"
++    LUA_INCLUDE_LINE="dofile(\"$LUA_THEME_FILE\")"
++
++    # Prefer Lua config on new Hyprland versions, keep legacy fallback.
++    if [ -f "$LUA_CONFIG_FILE" ]; then
++        CONFIG_FILE="$LUA_CONFIG_FILE"
++        INCLUDE_LINE="$LUA_INCLUDE_LINE"
++        INCLUDE_MATCH='dofile\s*\(.*noctalia.*\.lua|require\s*\(.*noctalia'
++    elif [ -f "$LEGACY_CONFIG_FILE" ]; then
++        CONFIG_FILE="$LEGACY_CONFIG_FILE"
++        INCLUDE_LINE="$LEGACY_INCLUDE_LINE"
++        INCLUDE_MATCH='source\s*=\s*.*noctalia.*\.conf'
++    else
++        # No config exists yet, create a Lua config by default.
++        CONFIG_FILE="$LUA_CONFIG_FILE"
++        INCLUDE_LINE="$LUA_INCLUDE_LINE"
++        INCLUDE_MATCH='dofile\s*\(.*noctalia.*\.lua|require\s*\(.*noctalia'
+         echo "Config file not found, creating $CONFIG_FILE..."
+         mkdir -p "$(dirname "$CONFIG_FILE")"
+         echo -e "\n$INCLUDE_LINE\n" >"$CONFIG_FILE"
+         echo "Created new config file with noctalia theme."
+-    else
+-        # Check if noctalia theme source already exists (flexible matching)
+-        if grep -qE 'source\s*=\s*.*noctalia.*\.conf' "$CONFIG_FILE"; then
++    fi
++
++    if [ -f "$CONFIG_FILE" ]; then
++        # Check if noctalia include already exists (flexible matching)
++        if grep -qE "$INCLUDE_MATCH" "$CONFIG_FILE"; then
+             echo "Theme already included, skipping modification."
+         else
+             # Only convert symlink when we actually need to write (NixOS read-only symlinks)
+diff --git a/Services/Theming/TemplateRegistry.qml b/Services/Theming/TemplateRegistry.qml
+index d60ea0163..800507e39 100644
+--- a/Services/Theming/TemplateRegistry.qml
++++ b/Services/Theming/TemplateRegistry.qml
+@@ -388,6 +388,18 @@ Singleton {
+       ],
+       "postProcess": () => `${templateApplyScript} hyprland`
+     },
++    {
++      "id": "hyprlandLua",
++      "name": "Hyprland (Lua)",
++      "category": "compositor",
++      "input": "hyprland.lua",
++      "outputs": [
++        {
++          "path": "~/.config/hypr/noctalia/noctalia-colors.lua"
++        }
++      ],
++      "postProcess": () => `${templateApplyScript} hyprland`
++    },
+     {
+       "id": "hyprtoolkit",
+       "name": "Hyprtoolkit",

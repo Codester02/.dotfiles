@@ -53,10 +53,13 @@ makepkg -si --noconfirm
 echo "Installing AUR packages..."
 
 yay -S --needed \
-  noctalia-shell \
   pokeget \
   cliphist \
-  python-pywalfox
+  python-pywalfox \
+  noctalia-qs \
+  brightnessctl \
+  imagemagick \
+  python
 
 # --------------------------------------------------
 # Directories
@@ -79,6 +82,13 @@ if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
     "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
+# --------------------------------------------------
+# Noctalia
+# --------------------------------------------------
+mkdir -p ~/.config/quickshell/noctalia-shell && curl -sL https://github.com/noctalia-dev/noctalia-shell/releases/latest/download/noctalia-latest.tar.gz | tar -xz --strip-components=1 -C ~/.config/quickshell/noctalia-shell
+cd ~/.config/quickshell/noctalia-shell/
+git apply "$DOTFILES_DIR"/HyprlandLuaTemplate.patch
+cd "$DOTFILES_DIR"
 # --------------------------------------------------
 # Symlink helpers
 # --------------------------------------------------

@@ -9,7 +9,7 @@
 hl.monitor({
   output = "HDMI-A-1",
   mode = "preferred",
-  position = "auto",
+  position = "-1080x0",
   scale = "1",
   transform = 3,
 })
@@ -17,14 +17,14 @@ hl.monitor({
 hl.monitor({
   output = "DP-1",
   mode = "3840x2160@60",
-  position = "auto",
+  position = "0x0",
   scale = 1,
 })
 
 hl.monitor({
   output = "HDMI-A-2",
   mode = "1920x1080@60",
-  position = "auto",
+  position = "3840x1080",
   scale = 1,
 })
 ---------------------
@@ -54,7 +54,10 @@ local colors = {
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("qs -c noctalia-shell")
+  --h1.exec_cmd("[workspace 1 silent] kitty -e spotify_player")
+  --h1.exec_cmd("[workspace 3 silent] discord & Telegram")
 end)
+
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
@@ -67,58 +70,47 @@ hl.env("HYPRCURSOR_SIZE", "24")
 ---- LOOK AND FEEL ----
 -----------------------
 
+-- Refer to https://wiki.hypr.land/Configuring/Basics/Variables/
 hl.config({
   general = {
-    gaps_in = 5,
-    gaps_out = 20,
-    border_size = 2,
+    gaps_in          = 5,
+    gaps_out         = 20,
 
-    col = {
-      active_border = colors.primary,
-      inactive_border = colors.surface,
+    border_size      = 2,
+
+    col              = {
+      active_border   = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
+      inactive_border = "rgba(595959aa)",
     },
 
+    -- Set to true to enable resizing windows by clicking and dragging on borders and gaps
     resize_on_border = false,
-    allow_tearing = false,
-    layout = "dwindle",
-  },
 
-  group = {
-    col = {
-      border_active = colors.secondary,
-      border_inactive = colors.surface,
-      border_locked_active = colors.error,
-      border_locked_inactive = colors.surface,
-    },
+    -- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
+    allow_tearing    = false,
 
-    groupbar = {
-      col = {
-        active = colors.secondary,
-        inactive = colors.surface,
-        locked_active = colors.error,
-        locked_inactive = colors.surface,
-      },
-    },
+    layout           = "dwindle",
   },
 
   decoration = {
-    rounding = 10,
-    rounding_power = 2,
+    rounding         = 10,
+    rounding_power   = 2,
 
-    active_opacity = 1.0,
+    -- Change transparency of focused and unfocused windows
+    active_opacity   = 1.0,
     inactive_opacity = 1.0,
 
-    shadow = {
-      enabled = true,
-      range = 4,
+    shadow           = {
+      enabled      = true,
+      range        = 4,
       render_power = 3,
-      color = "0xee1a1a1a",
+      color        = 0xee1a1a1a,
     },
 
-    blur = {
-      enabled = true,
-      size = 3,
-      passes = 1,
+    blur             = {
+      enabled  = true,
+      size     = 3,
+      passes   = 1,
       vibrancy = 0.1696,
     },
   },
@@ -126,9 +118,7 @@ hl.config({
   animations = {
     enabled = true,
   },
-})
-
--------------------
+}) -------------------
 ---- ANIMATIONS ---
 -------------------
 
@@ -376,3 +366,6 @@ hl.window_rule({
   move = "20 monitor_h-120",
   float = true,
 })
+
+dofile("/home/connor/.config/hypr/noctalia/noctalia-colors.lua")
+
