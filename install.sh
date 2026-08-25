@@ -31,7 +31,9 @@ sudo pacman -S --needed \
   ttf-jetbrains-mono-nerd \
   noto-fonts-emoji \
   ly \
-  thunderbird
+  thunderbird \
+  noctalia
+  
 
 # --------------------------------------------------
 # yay setup
@@ -75,20 +77,17 @@ cd "$DOTFILES_DIR"
 # Oh My Zsh
 # --------------------------------------------------
 
-echo "Installing oh-my-zsh..."
+#echo "Installing oh-my-zsh..."
 
-if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-  RUNZSH=no CHSH=no sh -c \
-    "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-fi
+#if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+#  RUNZSH=no CHSH=no sh -c \
+#    "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#fi
 
 # --------------------------------------------------
 # Noctalia
 # --------------------------------------------------
-mkdir -p ~/.config/quickshell/noctalia-shell && curl -sL https://github.com/noctalia-dev/noctalia-shell/releases/latest/download/noctalia-latest.tar.gz | tar -xz --strip-components=1 -C ~/.config/quickshell/noctalia-shell
-cd ~/.config/quickshell/noctalia-shell/
-git apply "$DOTFILES_DIR"/HyprlandLuaTemplate.patch
-cd "$DOTFILES_DIR"
+
 # --------------------------------------------------
 # Symlink helpers
 # --------------------------------------------------

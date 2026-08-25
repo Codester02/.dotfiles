@@ -27,13 +27,21 @@ hl.monitor({
   position = "3840x1080",
   scale = 1,
 })
+
+hl.monitor({
+  output = "eDP-1",
+  mode = "1920x1080@75",
+  position = "0x0",
+  scale = 1,
+})
+
 ---------------------
 ---- MY PROGRAMS ----
 ---------------------
 
 local terminal = "kitty"
 local fileManager = "dolphin"
-local menu = "qs -c noctalia-shell ipc call launcher toggle"
+local menu = "noctalia msg panel-toggle launcher"
 
 ----------------
 ---- COLORS ----
@@ -53,7 +61,7 @@ local colors = {
 -------------------
 
 hl.on("hyprland.start", function()
-  hl.exec_cmd("qs -c noctalia-shell")
+  hl.exec_cmd("noctalia")
   --h1.exec_cmd("[workspace 1 silent] kitty -e spotify_player")
   --h1.exec_cmd("[workspace 3 silent] discord & Telegram")
 end)
@@ -369,3 +377,6 @@ hl.window_rule({
 
 dofile("/home/connor/.config/hypr/noctalia/noctalia-colors.lua")
 
+
+-- For Noctalia Color templates
+require("noctalia").apply_theme()
